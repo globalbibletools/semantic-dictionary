@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Usage: ./split-ubs-dictionary.js language dictionaryFile
+// Usage: ./extract-ubs-dictionary-entries.js language dictionaryFile
 import xml2js from "xml2js";
 import fs from "node:fs";
 import console from "node:console";
@@ -31,7 +31,7 @@ if (!language || !ubsDictionaryFilePath) {
     const dataDir = `${scriptDir}/../../data/${language}`;
     fs.mkdirSync(dataDir, { recursive: true });
 
-    console.log("Splitting entries into files...");
+    console.log("Extracting lexicon entries into individual files...");
     const xmlBuilder = new xml2js.Builder({ rootName: "Lexicon_Entry" });
 
     for (const lexiconEntry of parsedDictionary["Lexicon"]["Lexicon_Entry"]) {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Usage: ./extract-ubs-dictionary-entries.js language dictionaryFile
+// Usage: ./extract-ubs-dictionary-entries.js translation-language original-language  dictionaryFile
 import xml2js from "xml2js";
 import fs from "node:fs";
 import console from "node:console";
@@ -8,14 +8,21 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // See https://nodejs.org/docs/latest/api/process.html#processargv
-const language = process.argv[2];
-const ubsDictionaryFilePath = process.argv[3];
+const translationLanguage = process.argv[2];
+const originalLanguage = process.argv[3];
+const ubsDictionaryFilePath = process.argv[4];
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 
-if (!language || !ubsDictionaryFilePath) {
+if (!translationLanguage || !originalLanguage || !ubsDictionaryFilePath) {
   console.error(
-    "Error: please pass in both the language of and the path to the dictionary file."
+    "Error: please provide the following arguments (in order):\n",
+    "\t(1) The translation language of the dictionary (eng, spa, etc).\n",
+    "\t(2) The original language being translated from (hebrew or greek).\n",
+    "\t(3) The path to the dictionary XML file\n",
+    `Only ${
+      process.argv.slice(2, 4).filter((value) => !!value).length
+    } argument(s) were passed of the 3 required`
   );
 } else {
   try {
@@ -28,7 +35,7 @@ if (!language || !ubsDictionaryFilePath) {
     const parsedDictionary = await xml2js.parseStringPromise(ubsDictionary);
 
     console.log("Making directory for data...");
-    const dataDir = `${scriptDir}/../../data/${language}`;
+    const dataDir = `${scriptDir}/../data/${translationLanguage}/${originalLanguage}`;
     fs.mkdirSync(dataDir, { recursive: true });
 
     console.log("Extracting lexicon entries into individual files...");

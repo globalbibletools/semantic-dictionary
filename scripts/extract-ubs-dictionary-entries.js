@@ -24,6 +24,10 @@ if (!translationLanguage || !originalLanguage || !ubsDictionaryFilePath) {
       process.argv.slice(2, 4).filter((value) => !!value).length
     } argument(s) were passed of the 3 required`
   );
+} else if (originalLanguage !== "hebrew" || originalLanguage !== "greek") {
+  console.error(
+    `Error: the original language must be either hebrew or greek. Received: '${originalLanguage}'`
+  );
 } else {
   try {
     console.log(`Opening dictionary file '${ubsDictionaryFilePath}'...`);
